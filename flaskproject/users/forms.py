@@ -70,27 +70,3 @@ class UpdateAccountForm(FlaskForm):
             # we can't update the username/email into others username and email
             if user:
                 raise ValidationError("That email is taken. Please choose another one")
-
-
-class RequestResetForm(FlaskForm):
-    email = StringField("Email", validators=[DataRequired(), Email()])
-    submit = SubmitField("Request Password Reset")
-
-    # >>>>  if the email doesn't exist
-    def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user is None:
-            raise ValidationError(
-                "There is no account with this email! You must register first."
-            )
-
-
-class ResetPasswordForm(FlaskForm):
-    password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
-
-    # to confirm pass we should compare the first and second pass so we need the equalto validator
-    confirm_password = PasswordField(
-        "Confirm Password",
-        validators=[DataRequired(), Length(min=8), EqualTo("password")],
-    )
-    submit = SubmitField("Reset Password")

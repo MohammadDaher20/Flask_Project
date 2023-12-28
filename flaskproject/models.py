@@ -42,5 +42,9 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
+    # pour organiser le home page en montrant une petit parti du text de chaque post
+    def short_content(self):
+        return " ".join(self.content.split()[:30])
+
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
